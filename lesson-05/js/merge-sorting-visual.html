@@ -1,0 +1,55 @@
+<style>
+    body {
+        font-size: 50px;
+    }
+</style>
+<script>
+    let show = true;
+
+    const mergeSort = (arr, gen, sp = "") => {
+        if (arr.length < 2) {
+            if (show)
+                document.write(` ${sp} <font color='blue'>${gen}</font> [${arr}]  <font color='gray' size='5'>arr.length < 2</font><br>`);
+            return arr;
+        }
+
+        const mid = Math.floor(arr.length / 2);
+        const left = arr.slice(0, mid);
+        const right = arr.slice(mid);
+
+        if (show) {
+            document.write(` ${sp} <font color='blue'>${gen}</font> [${left}] <font color='green' size='5'>left</font><br>`);
+            document.write(` ${sp} <font color='blue'>${gen}</font> [${right}] <font color='blue' size='5'>right</font><br>`);
+        }
+
+        return merge(mergeSort(left, gen + 1, sp + "&nbsp;&nbsp;"), mergeSort(right, gen + 1, sp + "&nbsp;&nbsp;"), gen, sp = "&nbsp;&nbsp;");
+    }
+
+    const merge = (left, right, gen, sp) => {
+        const result = [];
+
+        while (left.length && right.length) {
+            if (left[0] <= right[0]) result.push(left.shift());
+            else result.push(right.shift());
+        }
+
+        while (left.length) result.push(left.shift());
+        while (right.length) result.push(right.shift());
+
+        if (show)
+            document.write(` ${sp} <font color='blue'>${gen}</font> [${result}] <font color='red' size='5'>result</font><br>`);
+
+        return result;
+    }
+
+    const random = (max = 10) => Math.floor(Math.random() * max);
+
+    const n = 10;
+    const a = Array(n).fill(0).map(e => random());
+
+    document.write(`a = ${a}<br>`);
+
+    let generation = 1;
+    document.write(`${mergeSort(a, generation)} << merge sort<br>`);
+    document.write(`${a.sort((x, y) => x - y)} << expected<br>`);
+</script>
