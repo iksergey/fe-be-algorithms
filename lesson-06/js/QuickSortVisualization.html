@@ -1,0 +1,104 @@
+<script>
+    const colorQuick = (collection, pos, brl, brr, leftPos, rightPos) => {
+        let size = collection.length;
+
+        let result = "";
+        for (let i = 0; i < size; i++) {
+            if (leftPos === i) result += "    <b>[</b> ";
+            if (i === pos) result += `${brl}${collection[i]}${brr}<font color="gray"><sub><sub>${i}</sub></sub></font> `;
+            else result += `${collection[i]}<font color="gray"><sub><sub>${i}</sub></sub></font> `;
+            if (rightPos === i) result += "<b>]</b>    ";
+        }
+        return result;
+    }
+
+    const printArray = (text) => {
+        document.write(text + "<br>");
+    }
+
+    let show = !false;
+    let info = !false;
+    const sortQuick = (collection, left, right, tag = "", generation = 0) => {
+        ++generation;
+        if (info) printArray(`<sub>Поколение: ${generation} ${tag}</sub>`);
+        if (show) printArray(` >> left = ${left}<br> >> right = ${right}`);
+        let i = left;
+        if (info) printArray("" + colorQuick(collection, i, "<u>", "</u>", left, right));
+
+        let j = right;
+        if (info) printArray("" + colorQuick(collection, j, "<b>", "</b>", left, right));
+
+
+        // let pivotPos = parseInt(Math.floor((left + right) / 2));
+        let pivotPos = parseInt(Math.floor(Math.random() * (right - left) + left));
+        let pivot = collection[pivotPos];
+        if (info) printArray(`pivot = ${pivot}<font color="gray"><sub><sub>${pivotPos}</sub></sub></font>`);
+        if (info) printArray("p > " + colorQuick(collection, pivotPos, "(", ")", left, right));
+
+        let swapPositionItem;
+        while (i <= j) {
+            swapPositionItem = i;
+            while (collection[i] < pivot) {
+                i++;
+                swapPositionItem = i;
+                if (show) printArray(`i: ` + colorQuick(collection, i, "<u>", "</u>"));
+            }
+            if (show) printArray(`swap i = ${swapPositionItem}: ` + colorQuick(collection, swapPositionItem, "{", "}", left, right) + "");
+
+            swapPositionItem = j;
+            while (collection[j] > pivot) {
+                j--;
+                swapPositionItem = j;
+                if (show) printArray(`j: ` + colorQuick(collection, j, "<b>", "</b>"));
+            }
+            if (show) printArray(`swap j = ${swapPositionItem}: ` + colorQuick(collection, swapPositionItem, "{", "}", left, right));
+
+            if (i <= j) {
+
+                if (info) printArray("<br>" + colorQuick(collection, -1, "", "", left, right));
+                if (info) printArray(`<font size="1">swap ${collection[i]}<font color = "gray"><sub><sub>${i}</sub></sub></font> <-> ` +
+                    `${collection[j]}<font color = "gray"><sub><sub>${j}</sub></sub></font></font>`);
+
+                let t = collection[i];
+                collection[i] = collection[j];
+                collection[j] = t;
+
+                if (info) printArray(colorQuick(collection, -1, "", "", left, right) + "<br>");
+                i++;
+                j--;
+            }
+        }
+
+        if (left < j) sortQuick(collection, left, j, "left-j", generation);
+        if (i < right) sortQuick(collection, i, right, "i-right", generation);
+        if (info) printArray(`<sub>Поколение: ${generation}  ${tag} обработано<br></sub>`);
+
+        return collection;
+    }
+
+    const check = (arr1, arr2) => {
+        let size = arr1.length;
+        for (let i = 0; i < size; i++) {
+            if (arr1[i] !== arr2[i]) return false;
+        }
+        return true;
+    }
+    const getInteger = (min, max) => {
+        return Math.floor(Math.random() * (max - min) + min);
+    }
+    const generateArray = (count) => {
+        let arr = [];
+        for (let i = 0; i < count; i++) {
+            arr.push(getInteger(0, 5));
+        }
+        return arr;
+    }
+
+    let col = [5, 6, 8, 0, 4, 8];
+
+    printArray(colorQuick(col, -1, "", "", 0, col.length - 1) + "<br>");
+    let sorted = sortQuick(col, 0, col.length - 1);
+    printArray(colorQuick(sorted, -1, "", "", 0, col.length - 1) + "<br>");
+    printArray(check(sorted, col.sort()));
+    printArray("end");
+</script>
