@@ -172,7 +172,7 @@ public class TreeNode<T> {
         this.children = new ArrayList<>();
     }
 
-public void addChild(TreeNode<T> node) {
+    public void addChild(TreeNode<T> node) {
         children.add(node); 
     }
 }
@@ -199,6 +199,6 @@ public void addChild(TreeNode<T> node) {
 
 Это будет "стек".
 
-В других языках программирования, для каждой структуры данных может использоваться своё тип.
+В других языках программирования, для каждой структуры данных может использоваться свой тип.
 Stack<T> для стека, Queue<T> для очереди и т.д.
 
